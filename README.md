@@ -1,12 +1,21 @@
 # rails-ionic-play
 
 ### Desciption
-Followed the tutorial below to hook an ionic up to a rails api (backend). Made a few adjustments. The tutorial is awesome on it's own, but texting it up for my future reference.
+Followed the tutorial below to hook an ionic up to a rails api (backend). Made a few adjustments, so this readme actually deviates from the video in certain parts. The tutorial is awesome, so I'm texting it up for my future reference.
 
 - [Reference Tutorial](https://www.youtube.com/watch?v=M3MnOZmGu3k&ab_channel=JoseWanKenobi)
 
-### Set Up Rails
-Generate a new rails app:
+###Getting Started
+Create a folder to house the frontend (ionic) and backend (rails) or your app
+```
+mkdir raionic
+cd raionic
+```
+
+### Backend/API: Set Up Rails
+
+In the `raionic` directory, generate a new rails app:
+
 ```
 rails generate model person name phone
 rake db:create
@@ -125,4 +134,68 @@ And test if the api is working:
 curl -X GET 'http://localhost:3000/api/people'
 ```
 
-### Create Ionic App
+### Frontend: The Ionic App
+If you are in the rails directory, go back to your main directory, `raionic`:
+```
+cd ../
+```
+Create a new, blank, Ionic app:
+```
+ionic start agenda blank
+cd agenda
+```
+Add the ios platform to your ionic app:
+```
+ionic platform add ios
+```
+
+Run development environment (it will open in your browser):
+```
+ionic serve
+```
+
+Open `agenda/www/index.html` and paste the list structure within `ion-content` tags:
+```html
+<ul class="list">
+    <li class="item">
+    ...
+    </li>
+</ul>
+```
+In `www/js`, create a new file called `controllers.js` and paste the following code into this newly created file:
+```
+angular.module('starter.controllers', [])
+
+.controller('PeopleController', 
+  function($scope, $http) {
+    //Adding the api endpoint
+    var url = 'http://localhost:3000/api/people';
+
+      $http.get(url)
+      .success(function(people) {
+        $scope.people = people;
+      })
+      .error(function(data) {
+        console.log('Server side error occurred');
+      });
+  }
+);
+```
+
+Don't forget to declare the module for the controller in the app dependencies `www/js/app,js`:
+```
+angular.module('starter', ['ionic', 'starter.controllers'])
+```
+Now go to `www/index.html` to bind the controller to the list:
+```
+<ul class="list" ng-controller="PeopleController">
+    <li class="item" ng-repeat="person in people">
+      {{person.name}}
+    </li>
+</ul>
+```
+Lastly, build the app and run it in the Xcode iPhone emulator:
+```
+ionic build ios
+ionic emulate ios
+```
