@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   namespace :api do
-  get 'agenda/all'
+    get 'agenda/all'
   end
 
   namespace :api, contraints: { format: :json } do
