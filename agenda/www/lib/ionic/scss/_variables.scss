@@ -12,6 +12,8 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 
+$punch:                           #DC4333;
+
 
 // Base
 // -------------------------------
@@ -35,7 +37,7 @@ $headings-font-family:            $font-family-base !default;
 $headings-font-weight:            500 !default;
 $headings-line-height:            1.2 !default;
 
-$base-background-color:           #fff !default;
+$base-background-color:           $punch !default;
 $base-color:                      #000 !default;
 
 $link-color:                      $positive !default;

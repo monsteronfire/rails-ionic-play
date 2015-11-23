@@ -32,7 +32,8 @@
       <ion-content>
         <ul class="list" ng-controller="PeopleController">
             <li class="item" ng-repeat="person in people">
-              {{person.name}}
+              <h3>{{person.name}}</h3>
+              <p>{{person.phone}}</p>
             </li>
         </ul>
       </ion-content>
