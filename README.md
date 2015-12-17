@@ -203,3 +203,85 @@ Lastly, build the app and run it in the Xcode iPhone emulator:
 ionic build ios
 ionic emulate ios
 ```
+
+### Frontend/Ember CLI
+Followed this great [tutorial](http://nandovieira.com/setting-up-emberjs-with-rails-ember-cli-edition) to achieve this, minor things were updated.
+
+###### Configuring Rails for Ember
+To begin using the ember-cli, add it to the `Gemfile`:
+```ruby
+gem 'ember-cli-rails'
+```
+
+Remove `jquery-ujs` and `turbolinks`, then run 
+```zsh
+bundle install
+```
+
+Next, generate an initializer file
+```zsh
+rails generate ember:init
+```
+
+In the newly generated file, `config/initializers/ember.rb`, make sure your path is pointing to `:rails_root/frontend`, because this is where the frontend ember installation will live.
+```ruby
+EmberCLI.configure do |config|
+  config.app :frontend, path: Rails.root.join('frontend').to_s
+end
+```
+
+Create an `ember_controller.rb` in `app/controllers` directory. Make sure it inherits from the `ApplicationController` and that is has a `bootstrap` action:
+```ruby
+class EmberController < ApplicationController
+  def bootstrap
+  end
+end
+```
+
+Create a blank file at `app/views/ember/bootstrap.html.erb`.
+
+Create a new file at `app/views/layouts/ember.html.erb`, and populate it with the following boilerplate code:
+```erb
+<!doctype html>
+<html dir="ltr" lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ember</title>
+    <%= stylesheet_link_tag 'frontend' %>
+    <%= include_ember_script_tags :frontend %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
+```
+
+Update `config/routes.rb` file:
+```ruby
+Rails.application.routes.draw do
+  namespace :api do
+    get 'agenda/all'
+  end
+
+  namespace :api, contraints: { format: :json } do
+    get 'people', to: 'agenda#all'
+  end
+
+  root 'ember#bootstrap'
+  get '/*path', to: 'ember#bootstrap'
+
+end
+```
+
+###### Creating the Ember App
+In your rails root directory, run
+```zsh
+ember new frontend
+```
+
+Now you need to install the `ember-cli-rails-addon` NPM package. This needs to be done in the Ember app directory:
+```zsh
+cd frontend
+npm install ember-cli-rails-addon --save-dev
+```
