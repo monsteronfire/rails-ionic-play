@@ -7,4 +7,7 @@ Rails.application.routes.draw do
     get 'people', to: 'agenda#all'
   end
 
+  root 'ember#bootstrap'
+  get '/*path', to: 'ember#bootstrap'
+
 end
