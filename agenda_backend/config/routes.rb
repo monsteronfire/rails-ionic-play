@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     get 'agenda/all'
   end
 
-  namespace :api, contraints: { format: :json } do
+  namespace :api, constraints: { format: :json } do
     get 'people', to: 'agenda#all'
   end
 
